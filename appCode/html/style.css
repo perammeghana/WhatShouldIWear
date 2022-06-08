@@ -1,0 +1,76 @@
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+}
+/* Zebra striping */
+tr:nth-of-type(odd) { 
+  background: #eee; 
+}
+th { 
+  background: #333; 
+  color: white; 
+  font-weight: bold; 
+}
+td, th { 
+  padding: 6px; 
+  border: 1px solid #ccc; 
+  text-align: left; 
+}
+
+
+@media
+only screen and (max-width: 768px),
+(min-device-width: 780px) and (max-device-width: 1024px)  {
+
+/* Force table to not be like tables anymore */
+table, thead, tbody, th, td, tr {
+	display: block;
+}
+
+/* Hide table headers (but not display: none;, for accessibility) */
+thead tr {
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
+}
+	tr { border: 1px solid #ccc; }
+	td {
+	/* Behave  like a "row" */
+	/*border: none;*/
+	border-bottom: 1px solid #eee;
+	position: relative;
+	padding-left: 50%;
+}
+	td:before {
+	/* Now like a table header */
+	position: absolute;
+	/* Top/left values mimic padding */
+	top: 6px;
+	left: 6px;
+	width: 45%;
+	padding-right: 10px;
+	white-space: nowrap;
+}
+	/*
+Label the data
+*/
+td:nth-of-type(1):before { content: "Time"; font-weight:bold; }
+td:nth-of-type(2):before { content: "Temp";font-weight:bold; }
+td:nth-of-type(3):before { content: "DewPoint";font-weight:bold; }
+td:nth-of-type(4):before { content: "HeatIndex";font-weight:bold; }
+td:nth-of-type(5):before { content: "Wind";font-weight:bold; }
+td:nth-of-type(6):before { content: "Direction";font-weight:bold; }
+td:nth-of-type(7):before { content: "Gusts";font-weight:bold; }
+td:nth-of-type(8):before { content: "CloudCover"; font-weight:bold;}
+td:nth-of-type(9):before { content: "PrecipChance";font-weight:bold; }
+td:nth-of-type(10):before { content: "Humidity";font-weight:bold; }
+td:nth-of-type(11):before { content: "RainDescr";font-weight:bold; }
+td:nth-of-type(12):before { content: "ThunderDescr";font-weight:bold; }
+td:nth-of-type(13):before { content: "ApparentTemp"; font-weight:bold;}
+td:nth-of-type(14):before { content: "HVAC";font-weight:bold; }
+td:nth-of-type(15):before { content: "OutsideSedentary"; font-weight:bold;}
+td:nth-of-type(16):before { content: "OutsideMoving"; font-weight:bold;}
+td:nth-of-type(17):before { content: "RunEasy"; font-weight:bold;}
+td:nth-of-type(18):before { content: "RunHard"; font-weight:bold;}
+td:nth-of-type(19):before { content: "Bike"; font-weight:bold;}
+}
