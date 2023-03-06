@@ -1,116 +1,124 @@
-//import { Component } from "react";
-import * as React from 'react';
-import './AdminLogin.css'
-const INITIAL_STATE = {
-    email: '',
-    password: '',
-    errorsEmail : false,
-    errorsPass : false
-  };
-  
-  const VALIDATION = {
-    email: [
-      {
-        isValid: (value) => !!value,
-        message: 'Username is required',
+import { Component } from "react";
+import './AdminLogin.css';
+//import bcrypt from 'bcryptjs';
+//import { Navigate} from "react-router-dom";
+import withNavigateHook from './withNavigateHook';
+
+class AdminLogin extends Component{
+    constructor(props) {
+        super(props);
+    
+        this.state = {
+          fields: {
+            email:'',
+            password:'',
+          },
+          errors: {},
+          redirectToReferrer:false,
+        };
       }
-    ],
-    password: [
-      {
-        isValid: (value) => !!value,
-        message: 'Password is required.',
-      },
-    ],
-  };
-  
-  const getErrorFields = (form) =>
-    Object.keys(form).reduce((acc, key) => {
-      if (!VALIDATION[key]) return acc;
-  
-      const errorsPerField = VALIDATION[key]
-        // get a list of potential errors for each field
-        // by running through all the checks
-        .map((validation) => ({
-          isValid: validation.isValid(form[key]),
-          message: validation.message,
-        }))
-        // only keep the errors
-        .filter((errorPerField) => !errorPerField.isValid);
-  
-      return { ...acc, [key]: errorsPerField };
-    }, {});
-function AdminLogin (){
-    //render(){
-          const [form, setForm] = React.useState(INITIAL_STATE);
-          const errorFields = getErrorFields(form);
-            console.log(errorFields);
-        const handleChange = (event) => {
-            setForm({
-              ...form,
-              [event.target.id]: event.target.value,
-            });
-          };
-        //   let hasErrors = false;
-        //   let errorsEmail = false;
-        //   let errorsPass = false;
-          const handleSubmit = (event) => {
-            event.preventDefault();
-            const hasErrors = Object.values(errorFields).flat().length > 0;
-            if(hasErrors && (errorFields.email.length)){
-                console.log(errorFields.email.length+"email")
-                setForm({
-                    ...form,
-                    errorsEmail:true
-                })
-                //this.INITIAL_STATE.errorsEmail=true
-            }           
-            if(hasErrors && (errorFields.password.length)){
-                console.log(errorFields.password.length+"password")
-                setForm({
-                    ...form,
-                    errorsPass:true
-                })
-                //this.INITIAL_STATE.errorsPass=true
+    handleValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+        //Email
+        if(!fields["email"]){
+            formIsValid = false;
+            errors["email"] = "Please provide username";
+        }
+        if(!fields["password"]){
+            formIsValid = false;
+            errors["password"] = "Please provide password";
             }
-            if (hasErrors) return;
-            alert(form.email + ' ' + form.password);
-          };
+        this.setState({errors: errors});
+        return formIsValid;
+        }
+      handleChange(field, e) {
+        //this.handleValidation();
+        let fields = this.state.fields;
+        fields[field] = e.target.value;
+        this.setState({ fields });
+      }
+      async handleSubmit(e){        
+        e.preventDefault();
+        if(this.handleValidation()){
+          // const hashedPassword = bcrypt.hashSync(this.state.fields["password"],10);
+          // console.log(hashedPassword);
+          try {
+            const response =  await fetch('http://localhost:4000/testAPI',{
+              method: 'POST',
+              body: JSON.stringify({
+                // Add parameters here
+                username : this.state.fields.email,
+                password : this.state.fields.password
+              }),
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+              },
+            });
+            const json =  await response.json();
+            if(json.message == 'valid data'){
+              this.props.navigation('/Admin');
+              //redirect here
+              //this.state.redirectToReferrer=true;
+              //alert("success");
+            }
+            else{
+              let errors = {};
+              errors["password"] = "Incorrect credentials !!";
+              this.setState({errors: errors});
+            }
+          } catch (error) {
+            console.log(error);
+          } 
+          // finally {
+          //   this.setState({isLoading: false});
+          // }
+        }
+        else{
+          return
+        }
+    
+      }
+    render(){
+      // if(this.state.redirectToReferrer){
+      //   return <Navigate replace to="/Admin" />;
+      // }
         return(
-            // <div className="adminLoginDiv">
-        <form onSubmit={handleSubmit}>
+            <form onSubmit={this.handleSubmit.bind(this)}>
             <div className="userDiv">
               <label className="lblAdminLogin" htmlFor="text">Username</label>
               <input 
               className="inpAdminLogin" 
               id="email" 
               type="text" 
-              value={form.email}
-              onChange={handleChange}
+              value={this.state.fields["email"]}
+              onChange={this.handleChange.bind(this, "email")}
               placeholder="Please enter username"/>
-              {form.errorsEmail == true?(
+              {/* {form.errorsEmail == true?( */}
           <div className='errorDiv' id="errorsEmail">
-            {errorFields.email[0].message}
+            {this.state.errors["email"]}
           </div>
-        ) : null}
+        {/* ) : null} */}
             </div>
             <div className="passDiv">
               <label className="lblAdminLogin" htmlFor="password">Password</label>
               <input 
               className="inpAdminLogin" 
               id="password" type="password" 
-              value={form.password}
-              onChange={handleChange}
+              value={this.state.fields["password"]}
+              onChange={this.handleChange.bind(this, "password")}
               placeholder="Please enter password"/>
-              {form.errorsPass==true? (
+              {/* {form.errorsPass==true? ( */}
           <div className='errorDiv' id="errorsPass">
-            {errorFields.password[0].message}
+            {this.state.errors["password"]}
           </div>
-        ) : null}
+         {/* ) : null} */}
             </div>
             <button className="btnSubmit" type="submit">Submit</button>
+            <a href="/Reset" className="btnReset">Reset Password</a>
           </form>
-        //   </div>
         );
-    //}
+    }
 }
-export default AdminLogin;
+export default withNavigateHook(AdminLogin);

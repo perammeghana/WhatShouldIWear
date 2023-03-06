@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { BrowserRouter} from "react-router-dom"
 import reportWebVitals from './reportWebVitals';
 import AdminLogin from './components/AdminLogin/AdminLogin';
 import Header from './components/Layout/Header';
@@ -11,9 +12,11 @@ import Admin from './components/Admin/Admin';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <BrowserRouter>
     <Header />
-    <Admin />
+    <App />
     <Footer />
+    </BrowserRouter>
   </React.StrictMode>
 );
 
