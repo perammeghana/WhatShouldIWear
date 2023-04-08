@@ -10,16 +10,24 @@ const connection = mysql.createConnection(config.db);
 
 router.get('/getPreferenceFeel', function(req, res, next) {
     connection.query("SELECT * FROM preference where preference_category = 'Feel';", function(error, results, fields) {
-        if(results.length>0){
-            //console.log(results);
+        if (error) throw error;
+        else {
             res.send(results);
         }
     });
 });
 router.get('/getPreferenceSport', function(req, res, next) {
-    connection.query("SELECT * FROM preference where preference_category = 'Sport'", function(error, results, fields) {
-        if(results.length>0){
-            //console.log(results);
+    connection.query("SELECT * FROM preference where preference_category = 'Sport';", function(error, results, fields) {
+        if (error) throw error;
+        else {
+            res.send(results);
+        }
+    });
+});
+router.get('/getPreference', function(req, res, next) {
+    connection.query("SELECT * FROM preference;", function(error, results, fields) {
+        if (error) throw error;
+        else {
             res.send(results);
         }
     });
