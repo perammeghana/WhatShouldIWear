@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 global season
-season = ''
+season = 'Summer'
 # Stores the current day that we are working on (99=not calculated yet)
 global currentDayGlb 
 currentDayGlb = 99
@@ -13,6 +13,7 @@ global textDayGlb
 textDayGlb = ''
 
 TABULAR_PAGE= 'https://forecast.weather.gov/MapClick.php?lat=42.9569&lon=-78.8328&unit=0&lg=english&FcstType=digital'
+#TABULAR_PAGE= 'https://forecast.weather.gov/MapClick.php?lat=28.9270&lon=-82.0038&unit=0&lg=english&FcstType=digital'
 TABULAR_PAGE_2_SUFFIX = '&AheadHour=48'
 TABULAR_PAGE_3_SUFFIX = '&AheadHour=96'
 
@@ -101,10 +102,11 @@ def resetRowToGet (webpageRowNum, season):
             print ("<br>BSrowToGet: " + str(BSrowToGet))
         return BSrowToGet
     else:
-        #if (season == 'Winter'):
-        BSrowToGet = 17
-       # else:
-        #    BSrowToGet = 14
+        if (season == 'Winter'):
+            BSrowToGet = 17
+        else:
+            BSrowToGet = 14
+
         if (DEBUG_GET):
             print ("<br>BSrowToGet: " + str(BSrowToGet))
         return BSrowToGet
@@ -120,8 +122,8 @@ def readWeatherRows (webpageRowNum, tabular, season):
     # For each column in the table, populate the DB. Note, 'i' is each datapoint representing an hour.
     for i in range (1,25,1):
         
-        db_Hour[i] = ifTextGetDataFor (tabular, BSrowToGet, 'Hour (EST)', i, 1)
-#        db_Hour[i] = ifTextGetDataFor (tabular, BSrowToGet, 'Hour (EDT)', i, 1)
+#        db_Hour[i] = ifTextGetDataFor (tabular, BSrowToGet, 'Hour (EST)', i, 1)
+        db_Hour[i] = ifTextGetDataFor (tabular, BSrowToGet, 'Hour (EDT)', i, 1)
         if (db_Hour[i] == ""):
             print ("<br>ERROR: Could not read hour row!")
 
@@ -222,35 +224,36 @@ def readWeatherRows (webpageRowNum, tabular, season):
         
         # If there are additional rows, that indicates that the grid is in "winter" mode
         # with frozen precip options
-#        if (len(tabular.find_all('table')[7].find_all('tr')) > 14+BSrowToGet):
+        ###if (len(tabular.find_all('table')[7].find_all('tr')) > 14+BSrowToGet):
 #        if (len(tabular.find_all('table')[7].find_all('tr')) > 28):
 #            season = 'Winter'
-        if (tabular.find_all('table')[7].find_all('tr')[BSrowToGet].find_all('td')[0].font):
+        if (season == 'Winter'):
+            if (tabular.find_all('table')[7].find_all('tr')[BSrowToGet].find_all('td')[0].font):
+                BSrowToGet = BSrowToGet + 1
+                db_Snow[i] = ifTextGetDataFor (tabular, BSrowToGet, 'Snow', i, 0)
+                if (db_Snow[i] == ""):
+                    print ("<br>ERROR: Could not read Snow row!")
+
+                if (DEBUG_GET):
+                    print ("<br>The snow is: " + db_Snow[i])
+        
             BSrowToGet = BSrowToGet + 1
-            db_Snow[i] = ifTextGetDataFor (tabular, BSrowToGet, 'Snow', i, 0)
-            if (db_Snow[i] == ""):
-                print ("<br>ERROR: Could not read Snow row!")
+            db_FreezingRain[i] = ifTextGetDataFor (tabular, BSrowToGet, 'Freezing Rain', i, 0)
+            if (db_FreezingRain[i] == ""):
+                print ("<br>ERROR: Could not read freezing rain row!")
 
             if (DEBUG_GET):
-                print ("<br>The snow is: " + db_Snow[i])
+                print ("<br>The freezing rain is: " + db_FreezingRain[i])
         
-        BSrowToGet = BSrowToGet + 1
-        db_FreezingRain[i] = ifTextGetDataFor (tabular, BSrowToGet, 'Freezing Rain', i, 0)
-        if (db_FreezingRain[i] == ""):
-            print ("<br>ERROR: Could not read freezing rain row!")
+            BSrowToGet = BSrowToGet + 1
+            db_Sleet[i] = ifTextGetDataFor (tabular, BSrowToGet, 'Sleet', i, 0)
+            if (db_Sleet[i] == ""):
+                print ("<br>ERROR: Could not read sleet row!")
 
-        if (DEBUG_GET):
-            print ("<br>The freezing rain is: " + db_FreezingRain[i])
-        
-        BSrowToGet = BSrowToGet + 1
-        db_Sleet[i] = ifTextGetDataFor (tabular, BSrowToGet, 'Sleet', i, 0)
-        if (db_Sleet[i] == ""):
-            print ("<br>ERROR: Could not read sleet row!")
-
-        if (DEBUG_GET):
-            print ("<br>The sleet is: " + db_Sleet[i])
-#        else:
-#            season = 'Summer'
+            if (DEBUG_GET):
+                print ("<br>The sleet is: " + db_Sleet[i])
+        ###else:
+        ###    season = 'Summer'
 
         BSrowToGet = resetRowToGet (webpageRowNum, season)
     
