@@ -1,0 +1,28 @@
+
+.hourlyContainer {
+    display: flex;
+    align-items: center;
+    margin: 2px;
+    margin-top: 1vh;
+  }
+  .scroll-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border: none;
+    margin: 2px;
+    cursor: pointer;
+  }
+  .scroll-btn img {
+    width: 100%;
+    height: 100%;
+  }
+  .timedivHour{
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    /* background: rgb(203, 203, 203); */
+    width: 100%;
+  }

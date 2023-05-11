@@ -1,0 +1,79 @@
+.footer {
+    position: fixed;
+    height: 50px;
+    background-color: black;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin-bottom: 0px;
+}
+
+.adminCss{
+    float: right;
+    clear: right;
+    margin-top:10px;
+    margin-right: 20px;
+    color: white;
+    font-size: 22px;
+    font-family:'Karma';
+}
+
+.footer-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #000000;
+  }
+  
+.list-footer {
+    float: right;
+}
+  
+.list-footer a{
+    display: block;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    padding: 6px;
+}
+  
+.list-footer a:hover:not(.active) {
+    background-color: #393838;
+}
+  
+
+.mymodal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  
+    border: 1px solid #ccc;
+    background: #fff;
+    overflow: auto;
+    border-radius: 4px;
+    outline: none;
+    padding: 20px;
+}
+.feedback_footer{
+    margin-bottom: 50px;
+}
+.map-image-continer{
+    width: 100%; 
+    display: flex;
+}
+
+.map-image{
+    flex: 50%;
+    padding: 5px;
+}
+
+@media screen and (max-width: 700px) {
+    .map-image-container {
+        flex-direction: column;
+    }
+    .map-image{
+        flex:100%;
+    }
+}

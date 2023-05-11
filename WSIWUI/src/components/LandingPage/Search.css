@@ -1,0 +1,55 @@
+.text_bkg_box{
+    background: rgba(0, 0, 0, 0.4); /* Black background with 0.5 opacity */
+    width: 225px;
+    height: 75px;
+    border-radius: 50px;
+    font-size: 15px;
+    color: white;
+    justify-content: center;
+}
+.text_bkg_box_b{
+    background: rgba(0, 0, 0, 0.4); /* Black background with 0.5 opacity */
+    width: max-content;
+    height: 44px;
+    border-radius: 50px;
+    font-size: 15px;
+    color: white;
+    position: relative;
+}
+.w-d-img{
+    height: 26px;
+    color: white;
+}
+
+.w-d-text{
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+}
+
+.searchdiv{
+    height: max-content;
+}
+
+.textSearch{
+    color: white;
+    font-weight: bold;
+    font-family: "Karma";
+}
+.startcontimg{
+    justify-content: center;
+    margin-top: auto;
+}
+.closecontimg{
+    justify-content: left;
+}
+@media only screen and (max-width: 550px) {
+    .text_bkg_box{
+      width:40vw;
+      min-width: 120px;
+    }
+    .w-d-text{
+      font-size: 4vw;
+    }
+  }
